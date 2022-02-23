@@ -5,7 +5,6 @@ const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const app = require("../index");
 
-const Serie = require("../../database/models/Serie");
 const connectToDataBase = require("../../database");
 const User = require("../../database/models/User");
 
@@ -49,6 +48,18 @@ describe("Given /login/ endpoint", () => {
         .expect(403);
 
       expect(body).toHaveProperty("error");
+    });
+  });
+  describe("When it receives a POST request with the right user and a right password", () => {
+    test("then it should response status 200 and a token ", async () => {
+      const user = { username: "machinazo", password: "contrasena1234" };
+
+      const { body } = await request(app)
+        .post("/users/login")
+        .send(user)
+        .expect(200);
+
+      expect(body).toHaveProperty("token");
     });
   });
 });
