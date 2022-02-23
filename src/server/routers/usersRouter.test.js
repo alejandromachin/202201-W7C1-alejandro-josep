@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const request = require("supertest");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
@@ -5,21 +7,19 @@ const app = require("../index");
 
 const Serie = require("../../database/models/Serie");
 const connectToDataBase = require("../../database");
+const User = require("../../database/models/User");
 
 let mongoServer;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const connectionString = mongoServer.getUri();
   await connectToDataBase(connectionString);
-});
-
-beforeEach(async () => {
-  await Serie.create({ name: "Twin Peaks", platform: "Netflix" });
-  await Serie.create({ name: "True detective", platform: "Netflix" });
-});
-
-afterEach(async () => {
-  await Serie.deleteMany({});
+  await User.create({
+    name: "alejandro",
+    username: "machinazo",
+    password: "$2b$10$tqqi/uVD3T0TSHf7op08ie.e5uwaLqw9BsOUJpiAjh58l141M/44W",
+    admin: true,
+  });
 });
 
 afterAll(async () => {
@@ -30,7 +30,23 @@ afterAll(async () => {
 describe("Given /login/ endpoint", () => {
   describe("When it receives a POST request and a wrong user", () => {
     test("then it should response with a error and the status code 404 ", async () => {
-      const { body } = await request(app).get("/login").expect(404);
+      const user = { username: "wrong" };
+      const { body } = await request(app)
+        .post("/users/login")
+        .send(user)
+        .expect(404);
+
+      expect(body).toHaveProperty("error");
+    });
+  });
+  describe("When it receives a POST request with the right user and a wrong password", () => {
+    test("then it should response with a error and the status code 403 ", async () => {
+      const user = { username: "machinazo", password: "contrasena1233" };
+
+      const { body } = await request(app)
+        .post("/users/login")
+        .send(user)
+        .expect(403);
 
       expect(body).toHaveProperty("error");
     });

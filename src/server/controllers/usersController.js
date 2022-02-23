@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const User = require("../../database/models/User");
@@ -5,7 +7,6 @@ const encryptPassword = require("../utils/encryptPassword");
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
-
   const user = await User.findOne({ username });
 
   if (!user) {
