@@ -1,14 +1,14 @@
-const debug = require("debug")("series:db");
+const debug = require("debug")("series:database");
 const mongoose = require("mongoose");
 
 const connectToDataBase = (connectionString) =>
   new Promise((resolve, reject) => {
     mongoose.connect(connectionString, (error) => {
       if (error) {
-        reject(new Error(`You can't connect to a database: ${error.message}`));
+        reject(new Error(`You can't connect a database: ${error.message}`));
         return;
       }
-      debug("You're connected to a database");
+      debug("You're connected a database");
       resolve();
     });
   });
