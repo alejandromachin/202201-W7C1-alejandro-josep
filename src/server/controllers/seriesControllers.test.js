@@ -1,5 +1,5 @@
 const Serie = require("../../database/models/Serie");
-const getAllSeries = require("./seriesControllers");
+const { getAllSeries } = require("./seriesControllers");
 
 jest.mock("../../database/models/Serie");
 
