@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const User = require("../../database/models/User");
+const encryptPassword = require("../utils/encryptPassword");
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;

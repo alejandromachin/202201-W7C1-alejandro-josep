@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const { notFoundError, generalError } = require("./middlewares/errors");
 const getAllSeries = require("./controllers/seriesControllers");
+const usersRouter = require("./controllers/seriesControllers");
 
 const app = express();
 app.use(morgan("dev"));
