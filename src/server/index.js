@@ -3,7 +3,11 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const { notFoundError, generalError } = require("./middlewares/errors");
-const seriesRouter = require("./routers/seriesRouter");
+const seriesRouter = require("./routers/seriesRouter")
+const usersRouter = require("./controllers/seriesControllers");
+
+;
+
 
 const app = express();
 app.use(morgan("dev"));
