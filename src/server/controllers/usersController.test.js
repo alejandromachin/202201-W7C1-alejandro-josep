@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const User = require("../../database/models/User");
-const { login } = require("./usersController");
+const { login, registerUser } = require("./usersController");
 
 jest.mock("../../database/models/User");
 jest.mock("bcrypt");
@@ -64,6 +64,43 @@ describe("Given a Login function", () => {
       await login(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith({ token });
+    });
+  });
+});
+
+describe("Given a registerUSer middleware", () => {
+  describe("When it recieves a request with an existing username", () => {
+    test("Then it should call the next method with the error 'Sorry, username alredy taken'", async () => {
+      const req = {
+        body: { username: "machinazo", password: "123", name: "alejandro" },
+      };
+      const next = jest.fn();
+      User.findOne = jest.fn().mockResolvedValue(true);
+
+      const error = new Error("Sorry, username alredy taken");
+
+      await registerUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+  describe("When it recieves a request with an non existent username", () => {
+    test("Then it should call the json method of the response with the created user", async () => {
+      const req = {
+        body: { username: "machinazo", password: "123", name: "alejandro" },
+      };
+
+      const user = req.body;
+      const res = {
+        json: jest.fn(),
+      };
+      User.findOne = jest.fn().mockResolvedValue(false);
+
+      User.create = jest.fn().mockResolvedValue(user);
+
+      await registerUser(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(user);
     });
   });
 });
