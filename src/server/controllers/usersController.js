@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 const User = require("../../database/models/User");
+const encryptPassword = require("../utils/encryptPassword");
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
-
   const user = await User.findOne({ username });
 
   if (!user) {
@@ -28,4 +30,22 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = login;
+const registerUser = async (req, res, next) => {
+  const user = req.body;
+  const { username, password } = user;
+
+  const existingUser = await User.findOne({ username });
+
+  if (!existingUser) {
+    const encryptedPassword = await encryptPassword(password);
+    user.password = encryptedPassword;
+    const createdUser = await User.create(user);
+    res.json(createdUser);
+  } else {
+    const error = new Error("Sorry, username alredy taken");
+    error.code = 409;
+    next(error);
+  }
+};
+
+module.exports = { login, registerUser };
