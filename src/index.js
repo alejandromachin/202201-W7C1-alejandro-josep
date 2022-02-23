@@ -7,6 +7,6 @@ const port = process.env.PORT || 4000;
 const connectionString = process.env.MONGODB;
 
 (async () => {
-  await serverUp(port, app);
   await connectToDataBase(connectionString);
+  await serverUp(port, app);
 })();
