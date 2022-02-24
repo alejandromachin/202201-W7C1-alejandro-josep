@@ -58,3 +58,19 @@ describe("given a endpoint /series/", () => {
     });
   });
 });
+
+describe("given a endpoint /series/", () => {
+  describe("when it receives a request POST", () => {
+    test("then it should response with status 200 and have 3 series", async () => {
+      const newSerie = { name: "Loki", platform: "Netflix" };
+
+      const { body } = await request(app)
+        .post("/series")
+        .set("authorization", `Bearer ${token}`)
+        .send(newSerie)
+        .expect(201);
+
+      expect(body.name).toBe("Loki");
+    });
+  });
+});

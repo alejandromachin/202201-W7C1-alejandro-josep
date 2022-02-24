@@ -12,4 +12,14 @@ const getViewedSeries = async (req, res) => {
   res.json(series);
 };
 
-module.exports = { getAllSeries, getViewedSeries };
+const postSerie = async (req, res, next) => {
+  try {
+    const serie = req.body;
+    const newSerie = await Serie.create(serie);
+    res.status(201).json(newSerie); // esto es lo que se está testeando
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getAllSeries, getViewedSeries, postSerie };
