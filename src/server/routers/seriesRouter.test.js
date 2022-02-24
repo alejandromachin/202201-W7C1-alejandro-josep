@@ -70,7 +70,6 @@ describe("given a endpoint /series/", () => {
         .send(newSerie)
         .expect(201);
 
-      // expect(body).toHaveLength(1);
       expect(body.name).toBe("Loki");
     });
   });
