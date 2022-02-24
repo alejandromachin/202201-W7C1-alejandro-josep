@@ -16,10 +16,25 @@ const postSerie = async (req, res, next) => {
   try {
     const serie = req.body;
     const newSerie = await Serie.create(serie);
-    res.status(201).json(newSerie); // esto es lo que se está testeando
+    res.status(201).json(newSerie);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { getAllSeries, getViewedSeries, postSerie };
+const deleteSerie = async (req, res, next) => {
+  const { idSerie } = req.params;
+
+  const deletedSerie = await Serie.findByIdAndDelete(idSerie);
+
+  if (!deletedSerie) {
+    const error = new Error(
+      "Sorry, couldn't find the serie you want to delete"
+    );
+    next(error);
+  } else {
+    res.status(200).json(deletedSerie);
+  }
+};
+
+module.exports = { getAllSeries, getViewedSeries, postSerie, deleteSerie };
