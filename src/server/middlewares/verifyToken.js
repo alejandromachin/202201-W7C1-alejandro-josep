@@ -15,6 +15,7 @@ const verifyToken = async (req, res, next) => {
         );
 
         req.id = validatedUser.id;
+
         next();
       } catch {
         const error = new Error("invalid token");
