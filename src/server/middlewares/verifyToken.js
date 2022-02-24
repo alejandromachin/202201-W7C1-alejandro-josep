@@ -8,21 +8,20 @@ const verifyToken = async (req, res, next) => {
     const tokenId = headerAuth.split(" ")[1];
 
     if (typeof tokenId !== "undefined") {
-      const validatedUser = await jsonwebtoken.verify(
-        tokenId,
-        process.env.SECRET
-      );
-      req.id = validatedUser.id;
+      try {
+        const validatedUser = await jsonwebtoken.verify(
+          tokenId,
+          process.env.SECRET
+        );
 
-      if (!validatedUser) {
-        const newError = new Error("You are not authorized");
-        newError.code = 401;
-        next(newError);
-        return;
+        req.id = validatedUser.id;
+
+        next();
+      } catch {
+        const error = new Error("invalid token");
+        error.code = 400;
+        next(error);
       }
-      next();
-    } else {
-      res.sendStatus(403);
     }
   } else {
     const newError = new Error("Token missing");

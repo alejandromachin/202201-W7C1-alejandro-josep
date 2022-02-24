@@ -1,11 +1,10 @@
 const express = require("express");
-const adminValidation = require("../middlewares/adminValidation");
-
 const {
   getAllSeries,
   getViewedSeries,
   postSerie,
 } = require("../controllers/seriesControllers");
+const adminValidation = require("../middlewares/adminValidation");
 
 const seriesRouter = express.Router();
 
