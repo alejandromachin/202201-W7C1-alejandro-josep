@@ -16,9 +16,9 @@ const postSerie = async (req, res, next) => {
   try {
     const serie = req.body;
     const newSerie = await Serie.create(serie);
-    const series = await Serie.find();
-    // res.status(201).json(newSerie);
-    res.status(201).json(series);
+    // const series = await Serie.find();
+    res.status(201).json(newSerie);
+    // res.status(201).json(series);
   } catch (error) {
     next(error);
   }
