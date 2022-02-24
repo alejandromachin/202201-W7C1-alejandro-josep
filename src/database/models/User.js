@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     required: true,
   },
   series: {
-    type: [String],
+    type: [Schema.Types.ObjectId],
   },
 });
 
