@@ -1,4 +1,5 @@
 const express = require("express");
+const adminValidation = require("../middlewares/adminValidation");
 
 const {
   getAllSeries,
@@ -9,11 +10,7 @@ const {
 const seriesRouter = express.Router();
 
 seriesRouter.get("/", getAllSeries);
-seriesRouter.get("/viewed", getViewedSeries);
-// seriesRouter.get("/pending", getPendingSeries);
-seriesRouter.post("/", postSerie);
-// seriesRouter.put("/:idSerie", putSerie);
-// seriesRouter.delete("/:idSerie", deleteSerie);
-// seriesRouter.patch("/view/:idSerie", matchSerie);
+seriesRouter.get("/viewed", adminValidation, getViewedSeries);
+seriesRouter.post("/", adminValidation, postSerie);
 
 module.exports = seriesRouter;
