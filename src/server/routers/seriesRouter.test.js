@@ -31,7 +31,12 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await Serie.create({ name: "Twin Peaks", platform: "Netflix" });
+  await Serie.create({
+    name: "Twin Peaks",
+    platform: "Netflix",
+    _id: "6217cafa97bfd9cf7ce3f91d",
+  });
+
   await Serie.create({ name: "True detective", platform: "Netflix" });
 });
 
@@ -71,6 +76,21 @@ describe("given a endpoint /series/", () => {
         .expect(201);
 
       expect(body.name).toBe("Loki");
+    });
+  });
+});
+
+describe("Given a /series/:idSerie endpoint", () => {
+  describe("When it receives a request with DELETE and a right ID", () => {
+    test("Then it should response with code 200 and the serie deleted", async () => {
+      const idSerie = "6217cafa97bfd9cf7ce3f91d";
+
+      const { body } = await request(app)
+        .delete(`/series/${idSerie}`)
+        .set("authorization", `Bearer ${token}`)
+        .expect(200);
+
+      expect(body).toHaveProperty("name");
     });
   });
 });

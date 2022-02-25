@@ -31,6 +31,7 @@ const deleteSerie = async (req, res, next) => {
     const error = new Error(
       "Sorry, couldn't find the serie you want to delete"
     );
+    error.code = 404;
     next(error);
   } else {
     res.status(200).json(deletedSerie);
